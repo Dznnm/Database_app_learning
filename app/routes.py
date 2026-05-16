@@ -8,7 +8,7 @@ import sqlalchemy as sa
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    total_items = db.session.scalar(sa.select(sa.func.count().select_from(Inventory)))
+    total_items = db.session.scalar(sa.select(sa.func.count()).select_from(Inventory))
     low_stock = db.session.scalars(sa.select(Inventory).where(Inventory.qty <= 5)).all()
     total_menu = db.session.scalar(sa.select(sa.func.count()).select_from(Menu))
     return render_template('dashboard.html', 
@@ -59,3 +59,13 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/inventory')
+@login_required
+def inventory():
+    return "inventory page - coming soon"
+
+@app.route('/menu')
+@login_required
+def menu():
+    return "menu page - coming soon"
