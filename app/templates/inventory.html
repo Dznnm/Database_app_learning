@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Daftar Inventory</h4>
+    <a href="{{ url_for('add_inventory')}}" class="btn btn-primary btn-sm">Tambah Item</a>   
+</div>
+
+<div class="card border-secondary">
+    <div class="card-body p-0">
+        <table class="table table-dark table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Kode</th>
+                    <th>Nama Barang</th>
+                    <th>Kategori</th>
+                    <th>QTY</th>
+                    <th>Satuan</th>
+                    <th>Harga Beli</th>
+                    <th>Harga Jual</th>
+                    <th>Keterangan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td> {{ item.kode_barang }}</td>
+                    <td> {{ item.nama_barang }}></td>
+                    <td> {{ item.kategori }}></td>
+                    <td class="{% if item.qty <= 5 %}text-warning{% endif %}">{{ item.qty }}</td>
+                    <td> {{ item.satuan }}></td>
+                    <td>{{ item.harga_beli | rupiah if item.harga_beli else '-' }}</td>
+                    <td>{{ item.harga_jual | rupiah if item.harga_jual else '-' }}</td>
+                    <td>{{ item.keterangan or '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_inventory', id=item.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a href="{{ url_for('delete_inventory', id=item.id)}}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus item?')">Hapus</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9" class="text-center text-secondary">Belum ada item!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

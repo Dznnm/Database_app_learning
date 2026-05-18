@@ -63,9 +63,46 @@ def logout():
 @app.route('/inventory')
 @login_required
 def inventory():
-    return "inventory page - coming soon"
+    items = db.session.scalars(sa.select(Inventory)).all()
+    return render_template('inventory.html', items=items)
 
 @app.route('/menu')
 @login_required
 def menu():
-    return "menu page - coming soon"
+    items = db.session.scalars(sa.select(Menu)).all()
+    return render_template('menu.html', items=items)
+
+@app.route('/inventory/add')
+@login_required
+def add_inventory():
+    return "coming soon"
+
+@app.route('/inventory/edit/<int:id>')
+@login_required
+def edit_inventory(id):
+    return "coming soon"
+
+@app.route('/inventory/delete/<int:id>')
+@login_required
+def delete_inventory(id):
+    return "coming soon"
+
+@app.route('/menu/add')
+@login_required
+def add_menu():
+    return "coming soon"
+
+@app.route('/menu/edit/<int:id>')
+@login_required
+def edit_menu(id):
+    return "coming soon"
+
+@app.route('/menu/delete/<int:id>')
+@login_required
+def delete_menu(id):
+    return "coming soon"
+
+@app.route('/menu/<int:menu_id>/recipe')
+@login_required
+def recipe(menu_id):
+    return "coming soon"

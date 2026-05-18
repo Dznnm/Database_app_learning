@@ -11,4 +11,9 @@ db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 login = LoginManager(app)
 login.login_view = 'login'
+
+def format_rupiah(value):
+    return f'Rp {value:,.0f}'.replace(',', '.')
+
+app.jinja_env.filters['rupiah'] = format_rupiah
 from app import routes, models
