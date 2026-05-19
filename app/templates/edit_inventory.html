@@ -1,4 +1,4 @@
-{% extends {base.html} %}
+{% extends 'base.html' %}
 
 {% block title %}Edit Item{% endblock %}
 
@@ -28,8 +28,28 @@
                     <label class="form-label">Satuan</label>
                     <input type="text" name="satuan" class="form-control" value="{{ item.satuan or '' }}">
                 </div>
-                
+                <div class="col-md-4">
+                    <label class="form-label">QTY</label>
+                    <input type="number" name="qty" class="form-control" step="0.01" value="{{ item.qty }}" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Harga Beli</label>
+                    <input type="number" name="harga_beli" class="form-control" value="{{ item.harga_beli or ''}}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Harga Jual</label>
+                    <input type="number" name="harga_jual" class="form-control" value="{{ item.harga_jual or ''}}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Keterangan</label>
+                    <textarea name="keterangan" class="form-control" rows="2">{{ item.keterangan or '' }}</textarea>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{{ url_for('inventory') }}" class="btn btn-outline-secondary ms-2">Batal</a>
             </div>
         </form>
     </div>
 </div>
+{% endblock %}

@@ -33,7 +33,7 @@ class Inventory(db.Model):
     harga_beli: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer)
     harga_jual: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer)
     keterangan: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
-    recipes: so.WriteOnlyMapped['Recipe'] = so.relationship(back_populates='bahan')
+    recipes: so.WriteOnlyMapped['Recipe'] = so.relationship(back_populates='bahan', passive_deletes=True)
 
     def __repr__(self):
         return f'<Inventory {self.kode_barang} - {self.nama_barang}>'
@@ -43,15 +43,15 @@ class Menu(db.Model):
     nama_menu: so.Mapped[str] = so.mapped_column(sa.String(100), nullable=False)
     harga: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
     deskripsi: so.Mapped[str] = so.mapped_column(sa.String(200))
-    recipes: so.WriteOnlyMapped['Recipe'] = so.relationship(back_populates='menu')
+    recipes: so.WriteOnlyMapped['Recipe'] = so.relationship(back_populates='menu', passive_deletes=True)
 
     def __repr__(self):
         return f'<Menu {self.nama_menu}>'
     
 class Recipe(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    menu_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('menu.id'), nullable=False)
-    inventory_id : so.Mapped[int] = so.mapped_column(sa.ForeignKey('inventory.id'), nullable=False)
+    menu_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('menu.id', ondelete='CASCADE'), nullable=False)
+    inventory_id : so.Mapped[int] = so.mapped_column(sa.ForeignKey('inventory.id', ondelete='CASCADE'), nullable=False)
     jumlah : so.Mapped[float] = so.mapped_column(sa.Float, nullable=False)
     satuan: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
 

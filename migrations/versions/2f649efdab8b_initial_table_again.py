@@ -1,8 +1,8 @@
-"""tabel versi 1
+"""initial table again
 
-Revision ID: c3d9c3c9d3dd
+Revision ID: 2f649efdab8b
 Revises: 
-Create Date: 2026-05-16 15:11:41.134214
+Create Date: 2026-05-19 20:02:19.175778
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c3d9c3c9d3dd'
+revision = '2f649efdab8b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -51,8 +51,8 @@ def upgrade():
     sa.Column('inventory_id', sa.Integer(), nullable=False),
     sa.Column('jumlah', sa.Float(), nullable=False),
     sa.Column('satuan', sa.String(length=32), nullable=True),
-    sa.ForeignKeyConstraint(['inventory_id'], ['inventory.id'], ),
-    sa.ForeignKeyConstraint(['menu_id'], ['menu.id'], ),
+    sa.ForeignKeyConstraint(['inventory_id'], ['inventory.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['menu_id'], ['menu.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

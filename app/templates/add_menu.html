@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Tambah Menu{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Tambah Menu</h4>
+    <a href="{{ url_for('menu') }}" class="btn btn-outline-secondary btn-sm">Kembali?</a>
+</div>
+
+<div class="card border-secondary">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nama Menu</label>
+                    <input type="text" name="nama_menu" class="form-control", required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Harga</label>
+                    <input type="number" name="harga" class="form-control" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Deskripsi</label>
+                    <textarea name="deskripsi" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="tn btn-primary">Simpan</button>
+                    <a href="{{ url_for('menu')}} " class="btn btn-outline-secondary ms-2">Batal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
