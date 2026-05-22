@@ -24,13 +24,44 @@
                     <label class="form-label">Kategori</label>
                     <input type="text" name="kategori" class="form-control" value="{{ item.kategori or '' }}" required>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label">Satuan</label>
-                    <input type="text" name="satuan" class="form-control" value="{{ item.satuan or '' }}">
+                <div class="col-md-4">
+                    <label class="form-label">Satuan Storage</label>
+                    <select name="satuan" class="form-control">
+                    <option value="gram"
+                        {% if item.satuan == 'gram' %}
+                            selected
+                        {% endif %}>
+                            gram
+                    </option>
+                    <option value="ml"
+                        {% if item.satuan == 'ml' %}
+                            selected
+                        {% endif %}>
+                            ml
+                    </option>
+                    <option value="pcs"
+                        {% if item.satuan == 'pcs' %}
+                            selected
+                        {% endif %}>
+                            pcs
+                    </option>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">QTY</label>
                     <input type="number" name="qty" class="form-control" step="0.01" value="{{ item.qty }}" required>
+                </div>
+                <div class="col-md-4">
+                <label class="form-label">
+                    Input Unit
+                </label>
+                <select name="display_unit" class="form-control">
+                <option value="kg">kg</option>
+                <option value="gram">gram</option>
+                <option value="liter">liter</option>
+                <option value="ml">ml</option>
+                <option value="pcs">pcs</option>
+                </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Harga Beli</label>

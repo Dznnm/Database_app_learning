@@ -76,12 +76,18 @@ def menu():
 @login_required
 def add_inventory():
     if request.method == 'POST':
+        qty = float(request.form['qty'])
+        display_unit = request.form['display_unit']
+        if display_unit == 'kg':
+             qty *= 1000
+        elif display_unit == 'liter':
+             qty *= 1000
         item = Inventory(
             kode_barang = request.form['kode_barang'],
             nama_barang = request.form['nama_barang'],
             kategori = request.form['kategori'],
             satuan = request.form['satuan'],
-            qty = request.form['qty'],
+            qty = qty,
             harga_beli = request.form['harga_beli'] or None,
             harga_jual = request.form['harga_jual'] or None,
             keterangan = request.form['keterangan'] or None,
@@ -103,8 +109,14 @@ def edit_inventory(id):
         item.kode_barang = request.form['kode_barang']
         item.nama_barang = request.form['nama_barang']
         item.kategori = request.form['kategori'] or None
+        qty = float(request.form['qty'])
+        display_unit = request.form['display_unit']
+        if display_unit == 'kg':
+            qty *= 1000
+        elif display_unit == 'liter':
+            qty *= 1000
+        item.qty = qty
         item.satuan = request.form['satuan'] or None
-        item.qty = request.form['qty']
         item.harga_beli = request.form['harga_beli'] or None
         item.harga_jual = request.form['harga_jual'] or None
         item.keterangan = request.form['keterangan'] or None
@@ -172,4 +184,65 @@ def delete_menu(id):
 @app.route('/menu/<int:menu_id>/recipe')
 @login_required
 def recipe(menu_id):
-    return "coming soon"
+
+    menu = Menu.query.get_or_404(menu_id)
+
+    recipes = Recipe.query.filter_by(
+        menu_id=menu_id
+    ).all()
+
+    return render_template(
+        'recipe.html',
+        menu=menu,
+        recipes=recipes
+    )
+
+@app.route('/menu/<int:menu_id>/recipe/add',
+           methods=['GET', 'POST'])
+@login_required
+def add_recipe(menu_id):
+
+    menu = Menu.query.get_or_404(menu_id)
+
+    inventories = Inventory.query.all()
+
+    if request.method == 'POST':
+
+        recipe = Recipe(
+            menu_id=menu_id,
+            inventory_id=request.form['inventory_id'],
+            jumlah=request.form['jumlah'],
+            satuan=request.form['satuan']
+        )
+
+        db.session.add(recipe)
+        db.session.commit()
+
+        flash('Resep berhasil ditambahkan')
+
+        return redirect(
+            url_for('recipe', menu_id=menu_id)
+        )
+
+    return render_template(
+        'add_recipe.html',
+        menu=menu,
+        inventories=inventories
+    )
+
+@app.route('/recipe/delete/<int:id>')
+@login_required
+def delete_recipe(id):
+
+    recipe = Recipe.query.get_or_404(id)
+
+    menu_id = recipe.menu_id
+
+    db.session.delete(recipe)
+    db.session.commit()
+
+    flash('Resep berhasil dihapus')
+
+    return redirect(
+        url_for('recipe', menu_id=menu_id)
+    )

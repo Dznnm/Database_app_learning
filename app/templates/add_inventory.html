@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Nama Barang</label>
-                    <input type="text" name="nama_barang" class="form control" required>
+                    <input type="text" name="nama_barang" class="form-control" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Kategori</label>
@@ -26,7 +26,11 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Satuan</label>
-                    <input type="text" name="satuan" class="form-control" placeholder="ex: kg, liter, botol">
+                    <select name="satuan" class="form-control">
+                     <option value="gram">Kilogram / Gram</option>
+                     <option value="ml">Liter / ml</option>
+                     <option value="pcs">Pcs</option>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">QTY</label>
@@ -39,6 +43,18 @@
                 <div class="col-md-4">
                     <label class="form-label">Harga Jual</label>
                     <input type="number" name="harga_jual" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Input Unit</label>
+                    <select name="display_unit"
+                            class="form-control">
+                        <option value="kg">kg</option>
+                        <option value="gram">gram</option>
+                        <option value="liter">liter</option>
+                        <option value="ml">ml</option>
+                        <option value="pcs">pcs</option>
+                    </select>
+
                 </div>
                 <div class="col-12">
                     <label class="form-label">Keterangan</label>

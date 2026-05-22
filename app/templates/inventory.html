@@ -28,10 +28,10 @@
                 {% for item in items %}
                 <tr>
                     <td> {{ item.kode_barang }}</td>
-                    <td> {{ item.nama_barang }}></td>
-                    <td> {{ item.kategori }}></td>
+                    <td> {{ item.nama_barang }}</td>
+                    <td> {{ item.kategori }}</td>
                     <td class="{% if item.qty <= 5 %}text-warning{% endif %}">{{ item.qty }}</td>
-                    <td> {{ item.satuan }}></td>
+                    <td> {{ item.satuan }}</td>
                     <td>{{ item.harga_beli | rupiah if item.harga_beli else '-' }}</td>
                     <td>{{ item.harga_jual | rupiah if item.harga_jual else '-' }}</td>
                     <td>{{ item.keterangan or '-' }}</td>
