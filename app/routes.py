@@ -12,10 +12,14 @@ def dashboard():
     total_items = db.session.scalar(sa.select(sa.func.count()).select_from(Inventory))
     low_stock = db.session.scalars(sa.select(Inventory).where(Inventory.qty <= 5)).all()
     total_menu = db.session.scalar(sa.select(sa.func.count()).select_from(Menu))
+    sales = db.session.execute(sa.select(Penjualan).order_by(Penjualan.tanggal.desc()).limit(5)).scalars().all()
     return render_template('dashboard.html', 
                            total_items=total_items,
                            low_stock = low_stock,
-                           total_menu = total_menu)
+                           total_menu = total_menu,
+                           sales=sales
+                           )                          
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
