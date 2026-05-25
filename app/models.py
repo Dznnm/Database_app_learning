@@ -2,6 +2,7 @@ from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from typing import Optional
+from datetime import datetime
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
@@ -60,3 +61,23 @@ class Recipe(db.Model):
 
     def __repr__(self):
         return f'<Recipe menu:{self.menu_id} bahan:{self.inventory_id}>'
+
+class Penjualan(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    tanggal: so.Mapped[datetime] = so.mapped_column(sa.DateTime, default=lambda: datetime.now())
+    catatan: so.Mapped[Optional[str]] = so.mapped_column(sa.String(200))
+    items: so.WriteOnlyMapped['ItemPenjualan'] = so.relationship(
+        back_populates='penjualan', passive_deletes=True)
+    
+class ItemPenjualan(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    penjualan_id : so.Mapped[int] = so.mapped_column(
+        sa.ForeignKey('penjualan.id', ondelete='CASCADE'), nullable=False)
+    menu_id : so.Mapped[int] = so.mapped_column(
+        sa.ForeignKey('menu.id', ondelete='CASCADE'), nullable=False)
+    jumlah : so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
+    penjualan : so.Mapped['Penjualan'] = so.relationship(back_populates='items')
+    menu : so.Mapped['Menu'] = so.relationship()
+
+    def __repr__(self):
+        return f'<ItemPenjualan penjualan: {self.penjualan_id} menu: {self.menu_id}>'

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Detail Penjualan{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="mb-0">Detail Penjualan</h4>
+        <small class="text-secondary">{{ penjualan.tanggal.strftime('%d %B %Y') }}</small>
+    </div>
+    <a href="{{ url_for('sales') }}" class="btn btn-outline-secondary btn-sm">Kembali?</a>
+</div>
+
+{% if penjualan.catatan %}
+<div class="alert alert-secondary mb-4"> {{ penjualan.catatan }}</div>
+{% endif %}
+
+<div class="card border-secondary">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Menu</th>
+                    <th>Jumlah Terjual</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.menu.nama_menu }}</td>
+                    <td>{{ item.jumlah }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

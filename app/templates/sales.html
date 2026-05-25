@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Penjualan {% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Riwayat Penjualan</h4>
+    <a href="{{ url_for('add_sale') }}" class="btn btn-primary btn-sm">+ Tambahkan!</a>
+</div>
+
+<div class="card border-secondary">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Catatan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in penjualan %}
+                <tr>
+                    <td>{{ p.tanggal.strftime('%d %B %Y') }}</td>
+                    <td>{{ p.catatan or '-' }}</td>
+                    <td>
+                        <a href="{{ url_for('sale_detail', id=p.id) }}" class="btn btn-sm btn-outline-info">Detail</a>
+                        <a href="{{ url_for('delete_sale', id=p.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus Riwayat ini?')">Hapus</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="text-center py-5">
+                        <i class="bi bi-receipt fs-1 text-secondary d-block mb-3"></i>
+                        <p class="text-secondary mb-1">Belum ada rekap penjualan</p>
+                        <small class="text-secondary">Klik "+ Tambahkan!" untuk mulai mencatat</small>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

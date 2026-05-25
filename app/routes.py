@@ -1,7 +1,8 @@
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
+from datetime import datetime
 from app import app, db
-from app.models import User, Inventory, Menu, Recipe
+from app.models import User, Inventory, Menu, Recipe, Penjualan, ItemPenjualan
 import sqlalchemy as sa
 
 @app.route('/')
@@ -246,3 +247,70 @@ def delete_recipe(id):
     return redirect(
         url_for('recipe', menu_id=menu_id)
     )
+
+@app.route('/sales')
+@login_required
+def sales():
+    penjualan = db.session.scalars(
+        sa.select(Penjualan).order_by(Penjualan.tanggal.desc())).all()
+    return render_template('sales.html', penjualan=penjualan)
+
+@app.route('/sales/add', methods=['GET', 'POST'])
+@login_required
+def add_sale():
+    if request.method == 'POST':
+        p = Penjualan(
+            tanggal=datetime.now(),
+            catatan=request.form['catatan'] or None
+        )
+        db.session.add(p)
+        db.session.flush()
+
+        menus = request.form.getlist('menu_id')
+        jumlah = request.form.getlist('jumlah')
+
+        for menu_id, jum in zip(menus, jumlah):
+            if menu_id and jum and int(jum) > 0:
+                item = ItemPenjualan(
+                    penjualan_id = p.id,
+                    menu_id = int(menu_id),
+                    jumlah = int(jum)
+                )
+                db.session.add(item)
+
+                recipes = db.session.scalars(
+                    sa.select(Recipe).where(Recipe.menu_id == int(menu_id))).all()
+                for recipe in recipes:
+                    bahan = db.session.get(Inventory, recipe.inventory_id)
+                    if bahan:
+                        bahan.qty -= recipe.jumlah * int(jum)
+
+        db.session.commit()
+        flash('Rekapan telah disimpan dan stok telah diupdate!')
+        return(redirect(url_for('sales')))
+    
+    menus = db.session.scalars(sa.select(Menu)).all()
+    return render_template('add_sale.html', menus=menus)
+
+@app.route('/sales/<int:id>')
+@login_required
+def sale_detail(id):
+    p = db.session.get(Penjualan, id)
+    if p is None:
+        flash('Data tidak ditemukan!')
+        return redirect(url_for('sales'))
+    items = db.session.scalars(
+        sa.select(ItemPenjualan).where(ItemPenjualan.penjualan_id == id)).all()
+    return render_template('sales_detail.html', penjualan=p, items=items)
+
+@app.route('/sales/delete/<int:id>')
+@login_required
+def delete_sale(id):
+    p = db.session.get(Penjualan, id)
+    if p is None:
+        flash('Data tidak ditemukan!')
+        return redirect(url_for('sales'))
+    db.session.delete(p)
+    db.session.commit()
+    flash('Rekap penjualan telah dihapus!')
+    return redirect(url_for('sales'))
