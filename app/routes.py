@@ -81,17 +81,38 @@ def menu():
 @login_required
 def add_inventory():
     if request.method == 'POST':
+        existing = db.session.scalar(
+            sa.select(Inventory).where(
+                Inventory.kode_barang == request.form['kode_barang']
+            )
+        )
+        if existing:
+            flash('Kode barang sudah digunakan!')
+            return redirect(url_for('add_inventory'))
         qty = float(request.form['qty'])
         if qty < 0:
-            flash('qty tidak boleh dibawah 0!')
+            flash('QTY tidak boleh dibawah 0!')
             return redirect(url_for('add_inventory'))
+        unit = request.form['unit']
+        if unit == 'kg':
+            qty = qty * 1000
+            satuan = 'gram'
+        elif unit == 'liter':
+            qty = qty * 1000
+            satuan = 'ml'
+        elif unit == 'gram':
+            satuan = 'gram'
+        elif unit == 'ml':
+            satuan = 'ml'
+        else:
+            satuan = 'pcs'
         item = Inventory(
-            kode_barang = request.form['kode_barang'],
-            nama_barang = request.form['nama_barang'],
-            kategori = request.form['kategori'],
-            satuan = request.form['satuan'],
-            qty = qty,
-            keterangan = request.form['keterangan'] or None,
+            kode_barang=request.form['kode_barang'],
+            nama_barang=request.form['nama_barang'],
+            kategori=request.form['kategori'],
+            satuan=satuan,
+            qty=qty,
+            keterangan=request.form['keterangan'] or None,
         )
         db.session.add(item)
         db.session.commit()

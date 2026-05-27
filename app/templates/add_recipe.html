@@ -5,101 +5,63 @@
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-
     <h4 class="mb-0">
         Tambah Resep - {{ menu.nama_menu }}
     </h4>
-
     <a href="{{ url_for('recipe', menu_id=menu.id) }}"
        class="btn btn-outline-secondary btn-sm">
-
        Kembali
     </a>
-
 </div>
-
 <div class="card border-secondary">
-
     <div class="card-body">
-
         <form method="POST">
-
             <div class="row g-3">
-
                 <div class="col-md-6">
-
                     <label class="form-label">
                         Bahan
                     </label>
-
                     <select name="inventory_id"
                             class="form-control"
                             required>
-
                         {% for item in inventories %}
-
                         <option value="{{ item.id }}">
                             {{ item.nama_barang }}
                         </option>
-
                         {% endfor %}
-
                     </select>
-
                 </div>
-
                 <div class="col-md-3">
-
                     <label class="form-label">
                         Jumlah
                     </label>
-
                     <input type="number"
                            step="0.1"
                            name="jumlah"
                            class="form-control"
                            required>
-
                 </div>
-
                 <div class="col-md-3">
+                    <label class="form-label">Unit</label>
 
-                    <label class="form-label">
-                        Satuan
-                    </label>
-
-                    <input type="text"
-                           name="satuan"
-                           class="form-control"
-                           placeholder="gram / sdm / pcs"
-                           required>
-
+                    <select name="satuan" class="form-control">
+                        <option value="gram">gram</option>
+                        <option value="ml">ml</option>
+                        <option value="pcs">pcs</option>
+                    </select>
                 </div>
-
                 <div class="mt-4">
-
                     <button type="submit"
                             class="btn btn-primary">
-
                         Simpan
-
                     </button>
-
                     <a href="{{ url_for('recipe', menu_id=menu.id) }}"
                        class="btn btn-outline-secondary ms-2">
-
                        Batal
-
                     </a>
-
                 </div>
-
             </div>
-
         </form>
-
     </div>
-
 </div>
-
 {% endblock %}
