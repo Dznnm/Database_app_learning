@@ -10,41 +10,50 @@
 
 <div class="card border-secondary">
     <div class="card-body">
-        <form method="POST">
+        <form method="POST" autocomplete="off">
+            {{ form.hidden_tag() }}
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Kode Barang</label>
-                    <input type="text" name="kode_barang" class="form control" required>
+                    {{ form.kode_barang.label(class='form-label') }}
+                    {{ form.kode_barang(class='form-control') }}
+                    {% for error in form.kode_barang.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
                 </div>
+
                 <div class="col-md-6">
-                    <label class="form-label">Nama Barang</label>
-                    <input type="text" name="nama_barang" class="form-control" required>
+                    {{ form.nama_barang.label(class='form-label') }}
+                    {{ form.nama_barang(class='form-control') }}
+                    {% for error in form.nama_barang.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
                 </div>
+
                 <div class="col-md-6">
-                    <label class="form-label">Kategori</label>
-                    <input type="text" name="kategori" class="form-control">
+                    {{ form.kategori.label(class='form-label') }}
+                    {{ form.kategori(class='form-control') }}
                 </div>
+
                 <div class="col-md-6">
+                    {{ form.satuan.label(class='form-label') }}
+                    {{ form.satuan(class='form-control') }}
                 </div>
-                <div class="col-md-4">
-                <label class="form-label">Unit</label>
-                <select name="unit" class="form-control">
-                    <option value="kg">kg</option>
-                    <option value="gram">gram</option>
-                    <option value="liter">liter</option>
-                    <option value="ml">ml</option>
-                    <option value="pcs">pcs</option>
-                </select>
+
+                <div class="col-md-6">
+                    {{ form.qty.label(class='form-label') }}
+                    {{ form.qty(class='form-control', step='0.01', min='0') }}
+                    {% for error in form.nama_barang.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
                 </div>
-                    <input type="number" name="qty" class="form-control" step="0.01" min="0" value="0" required>
-                </div>
-                <div class="col-12">
-                    <label class="form-label">Keterangan</label>
-                    <textarea name="keterangan" class="form-control" rows="2"></textarea>
+
+                <div class="col-md-6">
+                    {{ form.keterangan.label(class='form-label') }}
+                    {{ form.keterangan(class='form-control', rows='2') }}
                 </div>
             </div>
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                {{ form.submit(class='btn btn-primary') }}
                 <a href="{{ url_for('inventory') }}" class="btn btn-outline-secondary ms-2">Batal</a>
             </div>
         </form>

@@ -4,6 +4,7 @@ from datetime import datetime
 from app import app, db
 from app.models import User, Inventory, Menu, Recipe, Penjualan, ItemPenjualan
 import sqlalchemy as sa
+from app.forms import InventoryForm
 
 @app.route('/')
 @app.route('/dashboard')
@@ -80,45 +81,28 @@ def menu():
 @app.route('/inventory/add', methods=['GET', 'POST'])
 @login_required
 def add_inventory():
-    if request.method == 'POST':
+    form = InventoryForm()
+    if form.validate_on_submit():
         existing = db.session.scalar(
             sa.select(Inventory).where(
-                Inventory.kode_barang == request.form['kode_barang']
-            )
-        )
+                Inventory.kode_barang == form.kode_barang.data))
         if existing:
-            flash('Kode barang sudah digunakan!')
-            return redirect(url_for('add_inventory'))
-        qty = float(request.form['qty'])
-        if qty < 0:
-            flash('QTY tidak boleh dibawah 0!')
-            return redirect(url_for('add_inventory'))
-        unit = request.form['unit']
-        if unit == 'kg':
-            qty = qty * 1000
-            satuan = 'gram'
-        elif unit == 'liter':
-            qty = qty * 1000
-            satuan = 'ml'
-        elif unit == 'gram':
-            satuan = 'gram'
-        elif unit == 'ml':
-            satuan = 'ml'
-        else:
-            satuan = 'pcs'
+            form.kode_barang.errors.append('Kode barang sudah digunakan!')
+            return render_template('add_inventory.html', form=form)
+        
         item = Inventory(
-            kode_barang=request.form['kode_barang'],
-            nama_barang=request.form['nama_barang'],
-            kategori=request.form['kategori'],
-            satuan=satuan,
-            qty=qty,
-            keterangan=request.form['keterangan'] or None,
+            kode_barang=form.kode_barang.data,
+            nama_barang=form.nama_barang.data,
+            kategori=form.kategori.data,
+            satuan=form.satuan.data,
+            qty=form.qty.data,
+            keterangan=form.keterangan.data or None,
         )
         db.session.add(item)
         db.session.commit()
         flash('Item sudah ditambahkan!')
         return redirect(url_for('inventory'))
-    return render_template('add_inventory.html')
+    return render_template('add_inventory.html', form=form)
 
 @app.route('/inventory/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
