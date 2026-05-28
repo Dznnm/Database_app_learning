@@ -130,3 +130,90 @@ body {
     font-size: 14px;
     margin-bottom: 20px;
 }
+
+.sidebar, .sidebar-mobile {
+    background-color: #1a1a2e;
+}
+
+.sidebar-mobile {
+    width: 240px !important;
+    background-color: #1a1a2e !important;
+}
+
+.sidebar-brand {
+    padding: 24px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-brand i {
+    font-size: 22px;
+    color: #f0a500;
+}
+
+.sidebar-nav {
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #adb5bd;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(255,255,255,0.08);
+    color: #ffffff;
+}
+
+.sidebar-link.active {
+    background-color: #f0a500;
+    color: #1a1a2e;
+    font-weight: 600;
+}
+
+.sidebar-link.active i {
+    color: #1a1a2e;
+}
+
+.sidebar-link i {
+    font-size: 16px;
+    width: 20px;
+}
+
+.sidebar-footer {
+    padding: 12px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* responsive mobile & tablet */
+@media (max-width: 991px) {
+    .main-content {
+        margin-left: 0 !important;
+        padding: 0 1rem 2rem 1rem;
+    }
+
+    /* offcanvas sidebar other pc */
+    .offcanvas.sidebar {
+        width: 240px !important;
+        background-color: #1a1a2e;
+        
+    }
+}
