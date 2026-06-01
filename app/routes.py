@@ -221,8 +221,7 @@ def add_recipe(menu_id):
         recipe = Recipe(
             menu_id=menu_id,
             inventory_id=request.form['inventory_id'],
-            jumlah=request.form['jumlah'],
-            satuan=request.form['satuan']
+            jumlah=request.form['jumlah']
         )
 
         db.session.add(recipe)
@@ -297,22 +296,21 @@ def add_sale():
                 )
                 db.session.add(item)
 
-                recipes = db.session.scalars(
-                    sa.select(Recipe).where(Recipe.menu_id == int(menu_id))).all()
                 for recipe in recipes:
                     bahan = db.session.get(Inventory, recipe.inventory_id)
                     if bahan:
                         kebutuhan = recipe.jumlah * int(jum)
-                        if bahan.qty < kebutuhan:
-                            db.session.rollback()
-                            flash(f'Stok {bahan.nama_barang} tidak cukup! Stok tersedia: {bahan.qty} {bahan.satuan}')
-                            return redirect(url_for('add_sale'))
-                        bahan.qty = max(0, bahan.qty - kebutuhan)
-
-                        if bahan.qty <= bahan.stok_minimum:
-                            flash(f'{bahan.nama_barang}: sisa {bahan.qty} {bahan.satuan} — stok menipis!', 'warning')
+                        bahan.qty = bahan.qty - kebutuhan
+                        if bahan.qty < 0:
+                            flash(
+                                f'⚠ Stok {bahan.nama_barang} minus {abs(bahan.qty):g} {bahan.satuan}. '
+                                f'Order tetap disimpan, segera lakukan stock adjustment.',
+                                'warning'
+                            )
+                        elif bahan.qty <= bahan.stok_minimum:
+                            flash(f'{bahan.nama_barang}: sisa {bahan.qty:g} {bahan.satuan} — stok menipis!', 'warning')
                         else:
-                            flash(f'✓ {bahan.nama_barang}: sisa {bahan.qty} {bahan.satuan}', 'info')
+                            flash(f'✓ {bahan.nama_barang}: sisa {bahan.qty:g} {bahan.satuan}', 'info')
 
         db.session.commit()
         flash('Rekapan telah disimpan dan stok telah diupdate!')

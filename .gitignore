@@ -16,7 +16,6 @@ __pycache__/
 
 # Flask instance
 instance/
-migrations/
 
 #file
 config.py
