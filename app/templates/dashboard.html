@@ -62,19 +62,46 @@
     </div>
 </div>
 {% else %}
-<div class="alert alert-success"> Semua stok oke!</div>
+<div class="alert alert-success mb-4"> Semua stok oke!</div>
+{% endif %}
+
+{# Menu yang tidak tersedia karena stok habis #}
+{% if out_of_stock %}
+<div class="card mb-4" style="border-color: #dc3545 !important;">
+    <div class="card-header d-flex align-items-center gap-2" style="border-bottom-color: #dd3949cb;">
+        <i class="bi bi-x-circle-fill text-danger"></i>
+        <span class="text-danger fw-semibold">Menu Tidak Tersedia (Stok Habis)</span>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-dark table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Nama Menu</th>
+                    <th>Harga</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in out_of_stock %}
+                <tr>
+                    <td>
+                        <s>{{ m.nama_menu }}</s>
+                    </td>
+                    <td>Rp{{ "{:,}".format(m.harga) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endif %}
 
 <div class="card border-secondary mt-4">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span>Penjualan Terbaru</span>
-
-        <a href="{{ url_for('sales') }}"
-           class="btn btn-sm btn-outline-primary">
+        <a href="{{ url_for('sales') }}" class="btn btn-sm btn-outline-primary">
             Lihat Semua
         </a>
     </div>
-
     <div class="card-body p-0">
         <table class="table table-dark table-hover mb-0">
             <thead>
@@ -83,14 +110,12 @@
                     <th>Catatan</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for sale in sales %}
                 <tr>
                     <td>{{ sale.tanggal.strftime('%d %b %Y') }}</td>
                     <td>{{ sale.catatan or '-' }}</td>
                 </tr>
-
                 {% else %}
                 <tr>
                     <td colspan="2" class="text-center text-secondary">

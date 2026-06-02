@@ -20,3 +20,4 @@ instance/
 #file
 config.py
 .claudecodesignore
+.claude
