@@ -22,10 +22,12 @@
                         Bahan
                     </label>
                     <select name="inventory_id"
+                            id="inventory_select"
                             class="form-control"
                             required>
                         {% for item in inventories %}
-                        <option value="{{ item.id }}">
+                        <option value="{{ item.id }}"
+                                data-unit="{{ item.satuan }}">
                             {{ item.nama_barang }}
                         </option>
                         {% endfor %}
@@ -44,11 +46,10 @@
                 <div class="col-md-3">
                     <label class="form-label">Unit</label>
 
-                    <select name="satuan" class="form-control">
-                        <option value="gram">gram</option>
-                        <option value="ml">ml</option>
-                        <option value="pcs">pcs</option>
-                    </select>
+                    <input type="text"
+                           id="unit_display"
+                           class="form-control"
+                           readonly>
                 </div>
                 <div class="mt-4">
                     <button type="submit"
@@ -64,4 +65,30 @@
         </form>
     </div>
 </div>
+
+<script>
+const inventorySelect =
+    document.getElementById('inventory_select');
+
+const unitDisplay =
+    document.getElementById('unit_display');
+
+function updateUnit() {
+    const selected =
+        inventorySelect.options[
+            inventorySelect.selectedIndex
+        ];
+
+    unitDisplay.value =
+        selected.dataset.unit || '';
+}
+
+inventorySelect.addEventListener(
+    'change',
+    updateUnit
+);
+
+updateUnit();
+</script>
+
 {% endblock %}

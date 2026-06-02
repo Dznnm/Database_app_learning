@@ -55,7 +55,6 @@ class Recipe(db.Model):
     menu_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey('menu.id', ondelete='CASCADE'), nullable=False)
     inventory_id : so.Mapped[int] = so.mapped_column(sa.ForeignKey('inventory.id', ondelete='CASCADE'), nullable=False)
     jumlah : so.Mapped[float] = so.mapped_column(sa.Float, nullable=False)
-    satuan: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
 
     menu: so.Mapped['Menu'] = so.relationship(back_populates='recipes')
     bahan: so.Mapped['Inventory'] = so.relationship(back_populates='recipes')
@@ -73,12 +72,15 @@ class Penjualan(db.Model):
 class ItemPenjualan(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     penjualan_id : so.Mapped[int] = so.mapped_column(
-        sa.ForeignKey('penjualan.id', ondelete='CASCADE'), nullable=False)
-    menu_id : so.Mapped[int] = so.mapped_column(
-        sa.ForeignKey('menu.id', ondelete='CASCADE'), nullable=False)
+        sa.ForeignKey('penjualan.id', ondelete='CASCADE'), nullable=False,
+    )
+    menu_id : so.Mapped[Optional[int]] = so.mapped_column(
+        sa.ForeignKey('menu.id', ondelete='SET NULL'), nullable=True,
+    )
+    nama_menu: so.Mapped[Optional[str]] = so.mapped_column(sa.String(100))
     jumlah : so.Mapped[int] = so.mapped_column(sa.Integer, nullable=False)
     penjualan : so.Mapped['Penjualan'] = so.relationship(back_populates='items')
-    menu : so.Mapped['Menu'] = so.relationship()
+    menu : so.Mapped[Optional['Menu']] = so.relationship()
 
     def __repr__(self):
         return f'<ItemPenjualan penjualan: {self.penjualan_id} menu: {self.menu_id}>'
