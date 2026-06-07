@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'superkey123'
-    SQLALCHEMY_DATABASE_URI = "postgresql+psycopg://postgres:postgresql17@localhost:5432/inventory_app"
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    REGISTER_TOKEN = os.environ.get('REGISTER_TOKEN') or 'supertoken123'
+    REGISTER_TOKEN = os.environ.get('REGISTER_TOKEN')
